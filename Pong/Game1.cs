@@ -22,6 +22,10 @@ namespace Pong
         private GameObject rightPaddle;
         private GameObject ball;
 
+        private Point ballVelocity = new();
+
+        private int paddleSpeed = 5;
+
         public Game1()
         {
             drawables = new();
@@ -38,14 +42,16 @@ namespace Pong
             var width = GraphicsDevice.Viewport.Width;
             var height = GraphicsDevice.Viewport.Height;
 
-            leftPaddle = CreateSqueare(new Point(25, 200));
+            leftPaddle = CreateSquare(new Point(25, 200));
             leftPaddle.Position = new Point(10, height / 2 - 100);
 
-            rightPaddle = CreateSqueare(new Point(25, 200));
+            rightPaddle = CreateSquare(new Point(25, 200));
             rightPaddle.Position = new Point(width - 35, height / 2 - 100);
 
-            ball = CreateSqueare(new Point(25, 25));
+            ball = CreateSquare(new Point(25, 25));
             ball.Position = new Point(width / 2 - 12, height / 2 - 12);
+
+            ballVelocity = new Point(5, 2);
 
             base.Initialize();
         }
@@ -62,7 +68,12 @@ namespace Pong
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
 
-            // TODO: Add your update logic here
+            var state = Keyboard.GetState();
+
+            CheckForPaddleInput(state, leftPaddle, Keys.W, Keys.S, paddleSpeed);
+            CheckForPaddleInput(state, rightPaddle, Keys.Up, Keys.Down, paddleSpeed);
+
+            ball.Position += ballVelocity;
 
             base.Update(gameTime);
         }
@@ -83,7 +94,7 @@ namespace Pong
             base.Draw(gameTime);
         }
 
-        protected GameObject CreateSqueare(Point size)
+        protected GameObject CreateSquare(Point size)
         {
             var texture = new Texture2D(GraphicsDevice,  1,1);
             texture.SetData(new Color[] { Color.White });
@@ -92,6 +103,18 @@ namespace Pong
             drawables.Add(square);
 
             return square;
+        }
+
+        private static void CheckForPaddleInput(KeyboardState state, GameObject go, Keys up, Keys down, int speed)
+        {
+            if (state.IsKeyDown(up))
+            {
+                go.Position = new Point(go.Position.X, go.Position.Y - speed);
+            }
+            else if (state.IsKeyDown(down))
+            {
+                go.Position = new Point(go.Position.X, go.Position.Y + speed);
+            }
         }
     }
 }
