@@ -15,12 +15,18 @@ namespace Pong.GameObjects
         private Point position;
         private Point size;
 
+        public Point Position
+        {
+            get => position; 
+            set => position = value;
+        }
+
         public GameObject(Texture2D sprite, Point size)
         {
             this.sprite = sprite;
 
             this.size = size;
-            position = new Point(100, 100);
+            position = new Point(0, 0);
         }
 
         public void Draw(SpriteBatch spriteBatch)

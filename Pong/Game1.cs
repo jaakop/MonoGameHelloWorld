@@ -18,6 +18,10 @@ namespace Pong
 
         private List<IDrawable> drawables;
 
+        private GameObject leftPaddle;
+        private GameObject rightPaddle;
+        private GameObject ball;
+
         public Game1()
         {
             drawables = new();
@@ -31,7 +35,17 @@ namespace Pong
         {
             // TODO: Add your initialization logic here
 
-            CreateSqueare(new Point(100, 100));
+            var width = GraphicsDevice.Viewport.Width;
+            var height = GraphicsDevice.Viewport.Height;
+
+            leftPaddle = CreateSqueare(new Point(25, 200));
+            leftPaddle.Position = new Point(10, height / 2 - 100);
+
+            rightPaddle = CreateSqueare(new Point(25, 200));
+            rightPaddle.Position = new Point(width - 35, height / 2 - 100);
+
+            ball = CreateSqueare(new Point(25, 25));
+            ball.Position = new Point(width / 2 - 12, height / 2 - 12);
 
             base.Initialize();
         }
@@ -55,7 +69,7 @@ namespace Pong
 
         protected override void Draw(GameTime gameTime)
         {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
+            GraphicsDevice.Clear(Color.Black);
             
             _spriteBatch.Begin();
 
