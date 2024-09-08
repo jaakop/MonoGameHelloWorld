@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using MonoGame;
+using Pong.Physics;
 
 namespace Pong.GameObjects
 {
-    public class GameObject : IDrawable
+    public class GameObject : IDrawable, ICollidable<GameObject>
     {
         private Texture2D sprite;
         private Point position;
@@ -32,6 +33,14 @@ namespace Pong.GameObjects
         public void Draw(SpriteBatch spriteBatch)
         {
             spriteBatch.Draw(sprite, new Rectangle(position, size), Color.White);
+        }
+
+        public bool CollidesWith(GameObject other)
+        {
+            Rectangle ownRect = new Rectangle(position, size);
+            Rectangle otherRect = new Rectangle(other.position, other.size);
+
+            return ownRect.Intersects(otherRect);
         }
     }
 }
